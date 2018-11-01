@@ -356,7 +356,7 @@ class Gameboard {
             if(this.playerTurn){
                 this.gameboard[newRow+1][newCol-1]="0";  
             } else {
-                this.gameboard[newRow-1][newCol-1]="0"; 
+                this.gameboard[newRow-1][newCol+1]="0"; 
             }
         }
         $(".jumpRight").removeClass("jumpRight");
