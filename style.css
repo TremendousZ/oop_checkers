@@ -1,0 +1,60 @@
+*{
+    box-sizing: border-box;
+}
+.container {
+    height: 100vh;
+    width: 100vw;
+}
+
+.leftColumn{
+    width:20%;
+    height: 100%;
+    display: inline-block;
+}
+
+.rightColumn{
+    width:70%;
+    height:100%;
+    display: inline-block;
+}
+
+.gameArea{
+    width: 95%;
+    height:95%;
+    font-size: 0;
+}
+.row{
+    width: 100%;
+    height:12.5%;
+}
+
+.column{
+    width:12.5%;
+    height:100%;
+    display: inline-block;
+}
+
+.light{
+    background-color: aquamarine;
+}
+
+.dark{
+    background-color: brown;
+}
+
+.checker {
+    height:90%;
+    width:90%;
+    border-radius: 100%;
+}
+.player1{
+    background-color: crimson;
+}
+
+.player2{
+    background-color:black;
+}
+
+.highlight{
+    border:2px solid greenyellow;
+}
