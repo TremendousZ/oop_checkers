@@ -57,14 +57,13 @@ class Gameboard {
     }
 
     startGame(){
-        $(".checker").on('click', this.getPosition.bind(this));   
+        this.unlockCheckers();  
     }
 
     getPosition(){
         let selectedChecker = $(event.currentTarget);
         let onRow = selectedChecker.parent().parent().attr("rownumber");
         let onCol = selectedChecker.parent().attr("columnnumber");
-        console.log("selected Checker", selectedChecker ,onRow,onCol);
         this.checkAvailableMoves(onRow,onCol);
     }
 
@@ -81,23 +80,93 @@ class Gameboard {
             moveRight = this.getSquareValue(row-1,column+1);  
            }
            
-           if(moveLeft == "0" && this.playerTurn){
-            $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
-            $(".highlight").on('click', this.moveToSquare.bind(this));
-           } else if(moveLeft == "0" && !this.playerTurn){
-            $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
-            $(".highlight").on('click', this.moveToSquare.bind(this));
-           }
-           if(moveRight == "0"&& this.playerTurn){
-            $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
-            $(".highlight").on('click', this.moveToSquare.bind(this));
-           } else if(moveRight == "0" && !this.playerTurn){
-            $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
-            $(".highlight").on('click', this.moveToSquare.bind(this));
-           }
+           switch(moveLeft){
+                case "0":
+                    if(this.playerTurn){
+                        $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
+                    } else {
+                        $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
+                    }
+                break;
+                case "b":
+                    if(this.playerTurn){
+                        this.checkJump("left",row,column)
+                    }
+                break;
+                case "r":
+                    if(!this.playerTurn){
+                        this.checkJump("left",row,column)
+                    }
+            }
+            switch(moveRight){
+                case "0":
+                    if(moveRight == "0" && this.playerTurn){
+                        $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
+                    } else if(moveRight == "0" && !this.playerTurn){
+                        $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
+                    }
+                break;
+                case "b":
+                    if(this.playerTurn){
+                        this.checkJump("right",row,column)
+                    }
+                break;
+                case "r":
+                    if(!this.playerTurn){
+                        this.checkJump("right",row,column)
+                    }
+            }
+
+        //    if(moveLeft == "0" && this.playerTurn){
+        //     $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
+        //    } else if(moveLeft == "0" && !this.playerTurn){
+        //     $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
+        //    }
+        //    if(moveRight == "0"&& this.playerTurn){
+        //     $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
+        //    } else if(moveRight == "0" && !this.playerTurn){
+        //     $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight");  
+        //    }
+        $(".highlight").on('click', this.moveToSquare.bind(this));
         this.currentRow=row;
         this.currentColumn=column;
         this.getSquareValue(row,column);
+    }
+
+    checkJump(direction,row,column){
+        debugger;
+        let possibleJump;
+        if(this.playerTurn){
+            switch(direction){
+                case "left":
+                possibleJump = this.gameboard[row+2][column-2];
+                if (possibleJump == '0'){
+                    $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
+                }
+                break;
+                case "right":
+                possibleJump = this.gameboard[row+2][column+2];
+                if (possibleJump == '0'){
+                    $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
+                }
+                break;
+            }
+        } else {
+            switch(direction){
+                case "left":
+                possibleJump = this.gameboard[row-2][column-2];
+                if (possibleJump == '0'){
+                    $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
+                }
+                break;
+                case "right":
+                possibleJump = this.gameboard[row-2][column+2];
+                if (possibleJump == '0'){
+                    $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
+                }
+                break;
+            }
+        }
     }
 
     getSquareValue(row,column){
@@ -106,14 +175,35 @@ class Gameboard {
 
     moveToSquare(){
         debugger;
+        $(".highlight").off('click');
         let destination = $(event.currentTarget);
+       
         let newRow = destination.parent().attr("rownumber");
+        newRow= parseFloat(newRow);
         let newCol = destination.attr("columnnumber");
+        newCol = parseFloat(newCol);
+        if(destination.hasClass("jumpLeft")){
+            if(this.playerTurn){
+                this.gameboard[newRow-1][newCol+1]="0";  
+            } else {
+                this.gameboard[newRow+1][newCol+1]="0"; 
+            }
+        } else if(destination.hasClass("jumpRight")){
+            if(this.playerTurn){
+                this.gameboard[newRow-1][newCol-1]="0";  
+            } else {
+                this.gameboard[newRow+1][newCol-1]="0"; 
+            }
+        }
+        $(".jumpRight").removeClass("jumpRight");
+        $(".jumpLeft").removeClass("jumpLeft");
+
         if(this.playerTurn){
             this.gameboard[newRow][newCol] = 'r';
         } else {
             this.gameboard[newRow][newCol] = 'b';
         }
+
         this.gameboard[this.currentRow][this.currentColumn] = "0";
           
         this.readGameBoard();
@@ -128,6 +218,18 @@ class Gameboard {
     
     switchPlayerTurn(){
         this.playerTurn = 1 - this.playerTurn;
-        $(".checker").on('click', this.getPosition.bind(this)); 
+        this.unlockCheckers(); 
+        console.log(this.gameboard);
+    }
+    unlockCheckers(){
+        if(this.playerTurn){
+            $(".playerTurn").text('Player 1 Turn').css('color','red');
+            $(".player1").on('click', this.getPosition.bind(this)); 
+            $(".player2").off('click'); 
+        } else {
+            $(".playerTurn").text('Player 2 Turn').css('color','black');
+            $(".player2").on('click', this.getPosition.bind(this));
+            $(".player1").off('click'); 
+        }
     }
 }
