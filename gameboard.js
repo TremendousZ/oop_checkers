@@ -6,6 +6,9 @@ class Gameboard {
         this.playerTurn = 1;
         this.currentRow ="";
         this.currentColumn="";
+        this.noJumpsLeft=false;
+        this.checker;
+        this.firstMove=true;
     }
 
     createBoard(){
@@ -43,19 +46,19 @@ class Gameboard {
         for(let rowIndex = 0; rowIndex < 8;rowIndex++){
 
             for(let columnIndex = 0; columnIndex < 8;columnIndex++ ){
-                if(this.gameboard[rowIndex][columnIndex]== "r"||this.gameboard[rowIndex][columnIndex]== "R"){
+                if(this.gameboard[rowIndex][columnIndex]== "r"||this.gameboard[rowIndex][columnIndex]== "King1"){
                    let redChecker = new Checker("red");
                     let occupiedSquare = $("div[rownumber="+rowIndex+"] > div[columnnumber="+columnIndex+"]");
-                    if(this.gameboard[rowIndex][columnIndex]=="R"){
+                    if(this.gameboard[rowIndex][columnIndex]=="King1"){
                         occupiedSquare.append(redChecker.createRedKing());
                     } else {
                         occupiedSquare.append(redChecker.createRedChecker());
                     }
                      
-                } else if(this.gameboard[rowIndex][columnIndex]== "b"||this.gameboard[rowIndex][columnIndex]== "B"){
+                } else if(this.gameboard[rowIndex][columnIndex]== "b"||this.gameboard[rowIndex][columnIndex]== "King2"){
                     let blackChecker = new Checker("black");
                     let occupiedSquare = $("div[rownumber="+rowIndex+"] > div[columnnumber="+columnIndex+"]");
-                    if(this.gameboard[rowIndex][columnIndex]=="B"){
+                    if(this.gameboard[rowIndex][columnIndex]=="King2"){
                         occupiedSquare.append(blackChecker.createBlackKing());
                     } else {
                         occupiedSquare.append(blackChecker.createBlackChecker());
@@ -69,23 +72,37 @@ class Gameboard {
         this.unlockCheckers();  
     }
 
-    getPosition(){
+    getPosition(row,col){
         let selectedChecker = $(event.currentTarget);
-        console.log("EVENT CURRENT TARGET", event.currentTarget);
-        let onRow = selectedChecker.parent().parent().attr("rownumber");
-        let onCol = selectedChecker.parent().attr("columnnumber");
-        if($(event.currentTarget).hasClass("king")){
-            this.checkAvailableMoves(onRow,onCol,true);
+        let onRow,onCol;
+        if(this.firstMove){
+            console.log("EVENT CURRENT TARGET", event.currentTarget);
+            onRow = selectedChecker.parent().parent().attr("rownumber");
+            onCol = selectedChecker.parent().attr("columnnumber");
+            onRow = parseFloat(onRow);
+            onCol = parseFloat(onCol);
+            if(selectedChecker.hasClass("king")){
+                this.checkAvailableMoves(onRow,onCol,true);
+            } else {
+                this.checkAvailableMoves(onRow,onCol,false);
+            }
         } else {
-            this.checkAvailableMoves(onRow,onCol,false);
+            onRow = row;
+            onCol = col;
+            if(this.gameboard[onRow][onCol]== "King1" || this.gameboard[onRow][onCol]== "King2"){
+                this.checkAvailableMoves(onRow,onCol,true);
+            } else {
+                this.checkAvailableMoves(onRow,onCol,false);
+            }
         }
-        
+         
     }
 
     checkAvailableMoves(row, column, king){
            row = parseFloat(row);
            column = parseFloat(column); 
            let moveLeft,moveRight,reverseLeft,reverseRight;
+           
            if(this.playerTurn){
                if(king){
                    if(row == "7"){
@@ -120,6 +137,14 @@ class Gameboard {
                }
              
            }
+           if(this.firstMove == false){
+            this.checkDoubleJump(moveLeft,moveRight,row,column);
+            $(".highlight").on('click', this.moveToSquare.bind(this));
+            this.currentRow=row;
+            this.currentColumn=column;
+            this.getSquareValue(row,column);
+            return;
+        }
            
            switch(moveLeft){
                 case "0":
@@ -128,13 +153,14 @@ class Gameboard {
                     } else {
                         $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
                     }
+                    this.noJumpsLeft=true;
                 break;
                 case "b":
                     if(this.playerTurn){
                         this.checkJump("left",row,column)
                     }
                 break;
-                case "B":
+                case "King2":
                     if(this.playerTurn){
                         this.checkJump("left",row,column)
                     }
@@ -144,7 +170,7 @@ class Gameboard {
                         this.checkJump("left",row,column)
                     }
                 break;
-                case "R":
+                case "King1":
                     if(!this.playerTurn){
                         this.checkJump("left",row,column)
                     }
@@ -158,14 +184,15 @@ class Gameboard {
                         $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
                     } else {
                         $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
-                    }
+                    } 
+                    this.noJumpsLeft=true;
                 break;
                 case "b":
                     if(this.playerTurn){
                         this.checkJump("reverseleft",row,column)
                     }
                 break;
-                case "B":
+                case "King2":
                     if(this.playerTurn){
                         this.checkJump("reverseleft",row,column)
                     }
@@ -175,7 +202,7 @@ class Gameboard {
                         this.checkJump("reverseleft",row,column)
                     }
                 break;
-                case "R":
+                case "King1":
                     if(!this.playerTurn){
                         this.checkJump("reverseleft",row,column)
                     }
@@ -190,13 +217,14 @@ class Gameboard {
                     } else {
                         $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
                     }
+                    this.noJumpsLeft=true;
                 break;
                 case "b":
                     if(this.playerTurn){
                         this.checkJump("right",row,column)
                     }
                 break;
-                case "B":
+                case "King2":
                     if(this.playerTurn){
                         this.checkJump("right",row,column)
                     }
@@ -206,7 +234,7 @@ class Gameboard {
                         this.checkJump("right",row,column)
                     }
                 break;
-                case "R":
+                case "King1":
                     if(!this.playerTurn){
                         this.checkJump("right",row,column)
                     }
@@ -221,13 +249,14 @@ class Gameboard {
                     } else {
                         $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column+1)+"]").addClass("highlight"); 
                     }
+                    this.noJumpsLeft=true;
                 break;
                 case "b":
                     if(this.playerTurn){
                         this.checkJump("reverseRight",row,column)
                     }
                 break;
-                case "B":
+                case "King2":
                     if(this.playerTurn){
                         this.checkJump("reverseRight",row,column)
                     }
@@ -237,7 +266,7 @@ class Gameboard {
                         this.checkJump("reverseRight",row,column)
                     }
                 break;
-                case "R":
+                case "King1":
                     if(!this.playerTurn){
                         this.checkJump("reverseRight",row,column)
                     }
@@ -251,16 +280,21 @@ class Gameboard {
     }
 
     checkJump(direction,row,column){
+        debugger;
         let possibleJump;
         if(this.playerTurn){
             switch(direction){
                 case "left":
                 if(row == "6"){
+                    this.noJumpsLeft=true;
+                    this.moveToSquare();
                     return;
                 }
-                possibleJump = this.gameboard[row+2][column-2];
+                if(column != "1"){
+                    possibleJump = this.gameboard[row+2][column-2];
                 if (possibleJump == '0'){
                     $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
+                }
                 }
                 break;
                 case "reverseleft":
@@ -271,11 +305,15 @@ class Gameboard {
                 break;
                 case "right":
                 if(row == "6"){
+                    this.noJumpsLeft=true;
+                    this.moveToSquare();
                     return;
                 }
-                possibleJump = this.gameboard[row+2][column+2];
+                if(column != "6"){
+                    possibleJump = this.gameboard[row+2][column+2];
                 if (possibleJump == '0'){
                     $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
+                }
                 }
                 break;
                 case "reverseRight":
@@ -284,11 +322,14 @@ class Gameboard {
                     $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRightReverse"); 
                 }
                 break;
+                default:
+                this.noJumpsLeft=true;
             }
         } else {
             switch(direction){
                 case "left":
                 if(row == "1"){
+                    this.noJumpsLeft=true;
                     return;
                 }
                 possibleJump = this.gameboard[row-2][column-2];
@@ -304,6 +345,7 @@ class Gameboard {
                 break;
                 case "right":
                 if(row == "1"){
+                    this.noJumpsLeft=true;
                     return;
                 }
                 possibleJump = this.gameboard[row-2][column+2];
@@ -317,6 +359,8 @@ class Gameboard {
                     $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRightReverse"); 
                 }
                 break;
+                default:
+                this.noJumpsLeft=true;
             }
         }
     }
@@ -325,71 +369,85 @@ class Gameboard {
         return this.gameboard[row][column];
     }
 
-    moveToSquare(){
-        $(".highlight").off('click');
-        let kingCheck = this.gameboard[this.currentRow][this.currentColumn];
-        let destination = $(event.currentTarget);
-        
-        let newRow = destination.parent().attr("rownumber");
-        newRow= parseFloat(newRow);
-        let newCol = destination.attr("columnnumber");
-        newCol = parseFloat(newCol);
-        if(destination.hasClass("jumpLeft")){
-            if(this.playerTurn){
-                this.gameboard[newRow-1][newCol+1]="0";  
-            } else {
-                this.gameboard[newRow+1][newCol+1]="0"; 
-            }
-        } else if(destination.hasClass("jumpRight")){
-            if(this.playerTurn){
-                this.gameboard[newRow-1][newCol-1]="0";  
-            } else {
-                this.gameboard[newRow+1][newCol-1]="0"; 
-            }
-        } else if(destination.hasClass("jumpRightReverse")){
-            if(this.playerTurn){
-                this.gameboard[newRow+1][newCol-1]="0";  
-            } else {
-                this.gameboard[newRow-1][newCol-1]="0"; 
-            }
-        } else if(destination.hasClass("jumpLeftReverse")){
-            if(this.playerTurn){
-                this.gameboard[newRow+1][newCol-1]="0";  
-            } else {
-                this.gameboard[newRow-1][newCol+1]="0"; 
-            }
-        }
-        $(".jumpRight").removeClass("jumpRight");
-        $(".jumpLeft").removeClass("jumpLeft");
-        $(".jumpLeftReverse").removeClass("jumpLeftReverse");
-        $(".jumpRightReverse").removeClass("jumpRightReverse");
-        if(this.playerTurn){
-            if(kingCheck == "R"){
-                this.gameboard[newRow][newCol] = 'R'; 
-            } else {
-                this.gameboard[newRow][newCol] = 'r';
-            }
-            
-            if(newRow == "7"){
-                this.gameboard[newRow][newCol] = 'R';  
-            }
+    moveToSquare(moves){
+        debugger;
+        let newRow, newCol;
+        if(moves == "secondMove"){
+            $(".highlight").off('click');
         } else {
-            if(kingCheck =="B"){
-                this.gameboard[newRow][newCol] = 'B';
-            } else {
-                this.gameboard[newRow][newCol] = 'b';
+            $(".highlight").off('click');
+            let kingCheck = this.gameboard[this.currentRow][this.currentColumn];
+            let destination = $(event.currentTarget);
+            newRow = destination.parent().attr("rownumber");
+            newRow= parseFloat(newRow);
+            newCol = destination.attr("columnnumber");
+            newCol = parseFloat(newCol);
+            if(destination.hasClass("jumpLeft")){
+                if(this.playerTurn){
+                    this.gameboard[newRow-1][newCol+1]="0";  
+                } else {
+                    this.gameboard[newRow+1][newCol+1]="0"; 
+                }
+            } else if(destination.hasClass("jumpRight")){
+                if(this.playerTurn){
+                    this.gameboard[newRow-1][newCol-1]="0";  
+                } else {
+                    this.gameboard[newRow+1][newCol-1]="0"; 
+                }
+            } else if(destination.hasClass("jumpRightReverse")){
+                if(this.playerTurn){
+                    this.gameboard[newRow+1][newCol-1]="0";  
+                } else {
+                    this.gameboard[newRow-1][newCol-1]="0"; 
+                }
+            } else if(destination.hasClass("jumpLeftReverse")){
+                if(this.playerTurn){
+                    this.gameboard[newRow+1][newCol-1]="0";  
+                } else {
+                    this.gameboard[newRow-1][newCol+1]="0"; 
+                }
             }
+            $(".jumpRight").removeClass("jumpRight");
+            $(".jumpLeft").removeClass("jumpLeft");
+            $(".jumpLeftReverse").removeClass("jumpLeftReverse");
+            $(".jumpRightReverse").removeClass("jumpRightReverse");
+        
+            if(this.playerTurn){
+                if(kingCheck === "King1"){
+                    this.gameboard[newRow][newCol] = 'King1'; 
+                } else {
+                    this.gameboard[newRow][newCol] = 'r';
+                }
             
-            if(newRow == "0"){
-                this.gameboard[newRow][newCol] = 'B';  
+                if(newRow == "7"){
+                    this.gameboard[newRow][newCol] = 'King1';  
+                }
+            } else {
+                if(kingCheck === "King2"){
+                    this.gameboard[newRow][newCol] = 'King2';
+                } else {
+                    this.gameboard[newRow][newCol] = 'b';
+                }
+                if(newRow == "0"){
+                    this.gameboard[newRow][newCol] = 'King2';  
+                }
             }
         }
-
         this.gameboard[this.currentRow][this.currentColumn] = "0";
-          
         this.readGameBoard();
+        this.endPlayerTurn(newRow,newCol);
+    }
+
+    endPlayerTurn(row,col){
         $(".highlight").removeClass('highlight');
-        this.switchPlayerTurn();
+        debugger;
+        if(this.noJumpsLeft){
+            this.switchPlayerTurn();
+            this.firstMove=true;
+        } else {
+            this.firstMove = false;  
+            this.getPosition(row,col);
+        }
     }
 
     readGameBoard(){
@@ -398,6 +456,7 @@ class Gameboard {
     }
     
     switchPlayerTurn(){
+        this.noJumpsLeft=false;
         this.playerTurn = 1 - this.playerTurn;
         this.unlockCheckers(); 
         console.log(this.gameboard);
@@ -412,5 +471,60 @@ class Gameboard {
             $(".player2").on('click', this.getPosition.bind(this));
             $(".player1").off('click'); 
         }
+    }
+
+    checkDoubleJump(moveRight,moveLeft, row, column){
+        debugger;
+        if(moveLeft == "0" && moveRight == "0"){
+            this.noJumpsLeft = true;
+            this.moveToSquare("secondMove");
+            return;
+        }
+        switch(moveRight){
+            case "b":
+            if(this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        case "King2":
+            if(this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        case "r":
+            if(!this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        case "King1":
+            if(!this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        }
+        switch(moveLeft){
+            case "b":
+            if(this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        case "King2":
+            if(this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        case "r":
+            if(!this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        case "King1":
+            if(!this.playerTurn){
+                this.checkJump("left",row,column)
+            }
+        break;
+        }
+
+        
     }
 }
