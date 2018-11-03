@@ -302,19 +302,20 @@ class Gameboard {
             switch(direction){
                 case "left":
                 if(row == "6"){
-                    this.noJumpsLeft=true;
-                    return;
-                }
-                if(column != "1"||column != "0"){ 
-                    possibleJump = this.gameboard[row+2][column-2];
-                    if (possibleJump == '0'){
-                        $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
+                    this.noJumpsLeft=true; 
+                } else {
+                    if(column != "1"||column != "0"){ 
+                        possibleJump = this.gameboard[row+2][column-2];
+                        if (possibleJump == '0'){
+                            $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
+                        } else {
+                            this.noJumpLeft=true;
+                        }
                     } else {
                         this.noJumpLeft=true;
                     }
-                } else {
-                    this.noJumpLeft=true;
                 }
+                
                 break;
                 case "reverseleft":
                 possibleJump = this.gameboard[row-2][column-2];
@@ -326,19 +327,20 @@ class Gameboard {
                 break;
                 case "right":
                 if(row == "6"){
-                    this.noJumpsLeft=true;
-                    return;
-                }
-                if(column != "6" || column !="7"){
-                    possibleJump = this.gameboard[row+2][column+2];
-                    if (possibleJump == '0'){
-                        $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
+                    this.noJumpsRight=true;
+                } else {
+                    if(column != "6" || column !="7"){
+                        possibleJump = this.gameboard[row+2][column+2];
+                        if (possibleJump == '0'){
+                            $("div[rownumber="+(row+2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
+                        } else {
+                            this.noJumpRight=true;
+                        }
                     } else {
                         this.noJumpRight=true;
                     }
-                } else {
-                    this.noJumpRight=true;
                 }
+                
                 break;
                 case "reverseRight":
                 possibleJump = this.gameboard[row-2][column+2];
@@ -356,19 +358,18 @@ class Gameboard {
                 case "left":
                 if(row == "1"){
                     this.noJumpLeft=true;
-                    return;
-                }
-                if(column !="0" || column != "1"){
-                    possibleJump = this.gameboard[row-2][column-2];
-                        if (possibleJump == '0'){
-                        $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
-                        } else {
-                            this.noJumpLeft = true;
-                        }
                 } else {
-                    this.noJumpLeft=true;
+                    if(column !="0" || column != "1"){
+                        possibleJump = this.gameboard[row-2][column-2];
+                            if (possibleJump == '0'){
+                            $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column-2)+"]").addClass("highlight jumpLeft"); 
+                            } else {
+                                this.noJumpLeft = true;
+                            }
+                    } else {
+                        this.noJumpLeft=true;
+                    }    
                 }
-                
                 break;
                 case "reverseleft":
                 possibleJump = this.gameboard[row+2][column-2];
@@ -380,20 +381,20 @@ class Gameboard {
                 break;
                 case "right":
                 if(row == "1"){
-                    this.noJumpLeft=true;
-                    return;
-                }
-                if(column!="6"|| column != "7"){
-                    possibleJump = this.gameboard[row-2][column+2];
-                    if (possibleJump == '0'){
-                        $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
-                    } else {
-                        this.noJumpRight = true;
-                    }
-                } else {
                     this.noJumpRight=true;
+                } else {
+                    if(column!="6"|| column != "7"){
+                        possibleJump = this.gameboard[row-2][column+2];
+                        if (possibleJump == '0'){
+                            $("div[rownumber="+(row-2)+"] > div[columnnumber="+(column+2)+"]").addClass("highlight jumpRight"); 
+                        } else {
+                            this.noJumpRight = true;
+                        }
+                    } else {
+                        this.noJumpRight=true;
+                    }
+                    
                 }
-                
                 break;
                 case "reverseRight":
                 possibleJump = this.gameboard[row+2][column+2];
