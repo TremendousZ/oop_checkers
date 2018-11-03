@@ -1,27 +1,46 @@
 *{
     box-sizing: border-box;
 }
+body{
+    margin: 0;
+}
 .container {
     height: 100vh;
     width: 100vw;
+    background-image: url("./images/park-background.jpeg");
+    background-size: cover;
 }
 
 .leftColumn{
     width:20%;
-    height: 100%;
     display: inline-block;
 }
 
 .rightColumn{
-    width:70%;
+    width:75%;
     height:100%;
     display: inline-block;
 }
 
+.gameboardBorder{
+    width: 80%;
+    height: 80%;
+    border-radius: 3%;
+    background-image: url("./images/wood_grain_texture.jpg");
+    position: relative;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
+    box-shadow: 4px 4px 4px black;
+}
 .gameArea{
     width: 95%;
     height:95%;
     font-size: 0;
+    position: relative;
+    top:50%;
+    left:50%;
+    transform: translate(-50%,-50%);
 }
 .row{
     width: 100%;
@@ -35,11 +54,12 @@
 }
 
 .light{
-    background-color: aquamarine;
+    background-image: url("./images/light_red_marble.jpeg");
+    background-size: cover;
 }
 
 .dark{
-    background-color: brown;
+    background-image: url("./images/dark-marble.jpg");
 }
 
 .checker {
@@ -47,13 +67,16 @@
     width:90%;
     border-radius: 100%;
     margin: 3.5% auto;
+    box-shadow: 2px 2px 2px black;
 }
 .player1{
-    background-color: crimson;
+    background-image: url("./images/red-checker.png");
+    background-position: center;
 }
 
 .player2{
-    background-color:black;
+    background-image: url("./images/dark-blue.png");
+    background-position: center;
 }
 
 .highlight{
