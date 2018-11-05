@@ -47,7 +47,8 @@ class Gameboard {
                 alternateColor =  1 - alternateColor;
             }
             $(".gameArea").append(row);
-            this.gameboard.push(logicRow);;
+            this.gameboard.push(logicRow);
+
         }
     }
     populateCheckers(){
@@ -406,7 +407,7 @@ class Gameboard {
                 break;
             }
         }
-        if(this.gameboard[row][column] == "b" || this.gameboard[row][column] =="r"){
+        if(this.gameboard[row][column] == "b" || this.gameboard[row][column] =="r" || this.gameboard[row][column] == 'King1'|| this.gameboard[row][column]=="King2"){
             if(this.noJumpLeft == true && this.noJumpRight == true){
                 this.moveToSquare("secondMove");
             }
@@ -508,6 +509,7 @@ class Gameboard {
     }
 
     endPlayerTurn(row,col){
+        this.checkEndGame();
         $(".highlight").removeClass('highlight');
                 if(!this.jumped|| this.kinged){
                     this.switchPlayerTurn();
@@ -532,23 +534,51 @@ class Gameboard {
     switchPlayerTurn(){
         this.noJumpsLeft=false;
         this.playerTurn = 1 - this.playerTurn;
-        this.unlockCheckers(); 
-        this.checkEndGame();
+        this.unlockCheckers();
+        console.log("player scores   ",this.player1Counter,this.player2Counter);
     }
     unlockCheckers(){
+        this.displayTurn();
         if(this.playerTurn){
             $(".playerTurn").text('Player 1 Turn').css('color','red');
             $(".player1").on('click', this.getPosition.bind(this)); 
             $(".player2").off('click'); 
         } else {
-            $(".playerTurn").text('Player 2 Turn').css('color','black');
+            $(".playerTurn").text('Player 2 Turn').css('color','blue');
             $(".player2").on('click', this.getPosition.bind(this));
             $(".player1").off('click'); 
         }
     }
 
     checkDoubleJump(moveRight,moveLeft, reverseRight,reverseLeft, row, column, king){
-        debugger;
+        if(this.playerTurn){
+            if(moveLeft == "r" || moveLeft == "King1"){
+                this.noJumpLeft = true;
+            }
+            if(moveRight =="r" || moveRight =="King1") {
+                this.noJumpRight = true;
+            }
+            if(reverseLeft == "r" || reverseLeft == "King1"){
+                this.noJumpReverseLeft = true;
+            }
+            if(reverseRight =="r" || reverseRight =="King1") {
+                this.noJumpReverseRight = true;
+            }
+        } else {
+            if(moveLeft == "b" || moveLeft == "King2"){
+                this.noJumpLeft = true;
+            }
+            if(moveRight =="b" || moveRight =="King2") {
+                this.noJumpRight = true;
+            }
+            if(reverseLeft == "b" || reverseLeft == "King2"){
+                this.noJumpReverseLeft = true;
+            }
+            if(reverseRight =="b" || reverseRight =="King2") {
+                this.noJumpReverseRight = true;
+            }
+        }
+
         if(moveLeft == "0" || moveLeft == undefined){
             this.noJumpLeft = true;
         } 
@@ -576,7 +606,6 @@ class Gameboard {
                 return;
                 }
         } else {
-            debugger;
             if(moveLeft =="0" && moveRight == undefined){
                 this.moveToSquare("secondMove");
                 return;
@@ -683,6 +712,13 @@ class Gameboard {
             }
         break;
         }
+            if(this.noJumpLeft == true && this.noJumpRight == true){
+                this.moveToSquare("secondMove");
+            }
+            if(this.noJumpLeft == true && this.noJumpsLeft == true && this.noJumpReverseLeft == true && this.noJumpReverseRight == true){     
+                    this.moveToSquare("secondMove"); 
+            }
+        
     }
 
     checkEndGame(){
@@ -695,4 +731,17 @@ class Gameboard {
                 $(".checker").off('click');
             }
     }   
+
+    displayTurn(){
+        let display = $('.displayTurn');
+        if(this.playerTurn){
+            $('.displayTurn').text("Player 1\'s Turn").css("color","red");
+        } else {
+            $('.displayTurn').text("Player 2\'s Turn").css("color","blue");
+        }
+        display.toggleClass('show');
+        setTimeout(()=>{
+            display.toggleClass('show');
+        },2000);
+    }
 }
