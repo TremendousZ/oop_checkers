@@ -83,14 +83,23 @@ body{
     border:2px solid greenyellow;
 }
 
-.king{
-    background-color: gold;
+.king1{
+    background-image: url("./images/light-marble-checker.png");
+    background-position: center;
+}
+.king2{
+    background-image: url("./images/dark-marble-checker.png");
+    background-position: center;
 }
 
 @keyframes slideRight{
     0%   { left:0%; top:50%;}
     50%  { left:50%; top:50%}
     100% { left:200%; top:50%;}
+}
+@keyframes slideDown{
+    0%  { left:50%; top:0%}
+    100% { left:50%; top:50%;}
 }
 
 .displayTurn{
@@ -105,14 +114,30 @@ body{
     animation-name: slideRight;
     animation-duration: 2s;
 }
-.show{
-    display: block;
+
+.win{
+    width:50%;
+    font-size:3rem;
+    position: absolute;
+    z-index: 3;
+    display:none;
+}
+.winAnimation{
+    animation-name: slideDown;
+    animation-duration: 4s;
 }
 
 .playerTurn{
     font-size: 2rem;
     position: absolute;
     top:5%;
-    left:5%;
-    
+    left:5%;    
+}
+.show{
+    display: block;
+}
+
+.center{
+    left:50%;
+    top:50%;
 }
