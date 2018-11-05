@@ -86,3 +86,33 @@ body{
 .king{
     background-color: gold;
 }
+
+@keyframes slideRight{
+    0%   { left:0%; top:50%;}
+    50%  { left:50%; top:50%}
+    100% { left:200%; top:50%;}
+}
+
+.displayTurn{
+    width:50%;
+    font-size:3rem;
+    color:red;
+    position: absolute;
+    z-index: 3;
+    display:none;
+}
+.slideAnimation{
+    animation-name: slideRight;
+    animation-duration: 2s;
+}
+.show{
+    display: block;
+}
+
+.playerTurn{
+    font-size: 2rem;
+    position: absolute;
+    top:5%;
+    left:5%;
+    
+}
