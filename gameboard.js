@@ -30,7 +30,6 @@ class Gameboard {
             for (let columnIndex = 0; columnIndex < 8; columnIndex++){
                 if(alternateColor){
                     column = $("<div>").addClass("dark column").attr("columnNumber",columnIndex);
-                    
                     logicRow.push("1");
                 } else {
                     column = $("<div>").addClass("light column ").attr("columnNumber",columnIndex);
@@ -93,7 +92,7 @@ class Gameboard {
             onRow = parseFloat(onRow);
             onCol = parseFloat(onCol);
             // Signal the checkAvailableMoves function whether or not the checker is a King
-            if(selectedChecker.hasClass("king")){
+            if(selectedChecker.hasClass("king1")||selectedChecker.hasClass("king2") ){
                 this.checkAvailableMoves(onRow,onCol,true);
             } else {
                 this.checkAvailableMoves(onRow,onCol,false);
@@ -509,21 +508,24 @@ class Gameboard {
     }
 
     endPlayerTurn(row,col){
-        this.checkEndGame();
-        $(".highlight").removeClass('highlight');
-                if(!this.jumped|| this.kinged){
-                    this.switchPlayerTurn();
-                    this.firstMove=true;
-                    this.jumped=false;
-                    this.noJumpsLeft = false;
-                    this.noJumpLeft = false;
-                    this.noJumpRight=false;
-                    this.kinged=false;
-                } else {
-                    this.firstMove = false;  
-                    this.getPosition(row,col);
-                    this.jumped=false;
-                }
+        if(this.player1Counter =="12" || this.player2Counter=="12"){
+            this.checkEndGame();
+        } else {
+            $(".highlight").removeClass('highlight');
+            if(!this.jumped|| this.kinged){
+                this.switchPlayerTurn();
+                this.firstMove=true;
+                this.jumped=false;
+                this.noJumpsLeft = false;
+                this.noJumpLeft = false;
+                this.noJumpRight=false;
+                this.kinged=false;
+            } else {
+                this.firstMove = false;  
+                this.getPosition(row,col);
+                this.jumped=false;
+            }
+        }
     }
 
     readGameBoard(){
@@ -552,6 +554,10 @@ class Gameboard {
 
     checkDoubleJump(moveRight,moveLeft, reverseRight,reverseLeft, row, column, king){
         if(this.playerTurn){
+            if(row == "6") {
+                this.noJumpLeft = true;
+                this.noJumpRight = true;
+            }
             if(moveLeft == "r" || moveLeft == "King1"){
                 this.noJumpLeft = true;
             }
@@ -565,6 +571,10 @@ class Gameboard {
                 this.noJumpReverseRight = true;
             }
         } else {
+            if(row == "1") {
+                this.noJumpLeft = true;
+                this.noJumpRight = true;
+            }
             if(moveLeft == "b" || moveLeft == "King2"){
                 this.noJumpLeft = true;
             }
@@ -622,6 +632,7 @@ class Gameboard {
                 this.moveToSquare("secondMove");
                 return;
             }
+            
 
         }
         switch(moveRight){
@@ -722,13 +733,16 @@ class Gameboard {
     }
 
     checkEndGame(){
+        let win = $('.win');
             if (this.player1Counter==12){
-                $(".playerTurn").text("PLAYER 1 WINS!");
-                $(".checker").off('click');
+                win.text("PLAYER 1 WINS!");
+                $(".player1").off('click');
+                win.toggleClass('show').addClass("center");
             }
             if (this.player2Count ==12){
-                $(".playerTurn").text("PLAYER 2 WINS!");
-                $(".checker").off('click');
+                win.text("PLAYER 2 WINS!");
+                $(".player1").off('click');
+                win.toggleClass('show').addClass("center");
             }
     }   
 

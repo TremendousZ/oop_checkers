@@ -11,7 +11,7 @@ class Checker{
     }
 
     createRedKing(){
-        return $("<div>").addClass("player1 checker king");
+        return $("<div>").addClass("player1 checker king1");
     }
 
     createBlackChecker(){
@@ -19,7 +19,7 @@ class Checker{
     }
 
     createBlackKing(){
-        return $("<div>").addClass("player2 checker king");
+        return $("<div>").addClass("player2 checker king2");
     }
 
     checkValidMoves(){
