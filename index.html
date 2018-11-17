@@ -8,11 +8,17 @@
         <script type="text/javascript" src = checker.js></script>
         <script type="text/javascript" src = gameboard.js></script>
         <script type="text/javascript" src = game.js defer></script>
-        <link rel="stylesheet" href="style.css"> 
+        <link rel="stylesheet" href="style.css">
+        <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"> 
     </head>
     <body>
         <div class = "container">
-            <div class="displayTurn slideAnimation">Player 1</div>
+            <div class = "turn-wrapper appearAnimation">
+                <div class = "sliding-background">
+                    
+                </div>  
+                <div class="displayTurn slideAnimation">Player 1</div>
+            </div>
             <div class ="win winAnimation"></div>
             <div class = "leftColumn">
                 <button>Start Game</button>
