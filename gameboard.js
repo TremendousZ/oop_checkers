@@ -82,6 +82,7 @@ class Gameboard {
     }
 
     getPosition(row,col){
+        $(".highlight").removeClass("highlight");
         // Find the current row and column of the selected checker
         let selectedChecker = $(event.currentTarget);
         let onRow,onCol;
@@ -739,7 +740,7 @@ class Gameboard {
                 $(".player1").off('click');
                 win.toggleClass('show').addClass("center");
             }
-            if (this.player2Count ==12){
+            if (this.player2Counter ==12){
                 win.text("PLAYER 2 WINS!");
                 $(".player1").off('click');
                 win.toggleClass('show').addClass("center");
@@ -748,14 +749,23 @@ class Gameboard {
 
     displayTurn(){
         let display = $('.displayTurn');
+        let slideBackground = $('.sliding-background');
+        let appearAnimation = $('.appearAnimation');
         if(this.playerTurn){
-            $('.displayTurn').text("Player 1\'s Turn").css("color","red");
+            slideBackground.addClass("player1");
+            $('.displayTurn').text("Player 1\'s Turn").css("color","white");
         } else {
-            $('.displayTurn').text("Player 2\'s Turn").css("color","blue");
+            $('.displayTurn').text("Player 2\'s Turn").css("color","white");
         }
         display.toggleClass('show');
+        slideBackground.toggleClass('show');
+        appearAnimation.toggleClass('show');
         setTimeout(()=>{
             display.toggleClass('show');
+            slideBackground.toggleClass('show');
+            appearAnimation.toggleClass('show');
+            slideBackground.removeClass("player1");
         },2000);
+        
     }
 }
