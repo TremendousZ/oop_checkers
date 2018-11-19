@@ -12,6 +12,9 @@
         <link href="https://fonts.googleapis.com/css?family=Anton" rel="stylesheet"> 
     </head>
     <body>
+        <video autoplay muted loop id="myVideo">
+                <source src="./video/night-water.mp4" type="video/mp4">
+        </video>
         <div class = "container">
             <div class = "turn-wrapper appearAnimation">
                 <div class = "sliding-background">
@@ -21,9 +24,11 @@
             </div>
             <div class ="win winAnimation"></div>
             <div class = "leftColumn">
-                <button>Start Game</button>
-                <button>Choose Colors</button>
-                <div class="playerTurn"></div>
+                <div class = "buttonContainer">
+                    <div class="playerTurn"></div>
+                    <button class = "resetButton" onclick="reset()">Reset Game</button>
+                    <button class = "stopAnimation">Animations : ON</button>    
+                </div>
             </div>
             <div class = "rightColumn">
                 <div class = "gameboardBorder">
@@ -34,6 +39,20 @@
             </div>
 
         </div>
-
+        
     </body>
+    <script>
+            var video = document.getElementById("myVideo");
+            var btn = document.getElementById("myBtn");
+            
+            function myFunction() {
+              if (video.paused) {
+                video.play();
+                btn.innerHTML = "Pause";
+              } else {
+                video.pause();
+                btn.innerHTML = "Play";
+              }
+            }
+            </script>
 </html>

@@ -17,6 +17,7 @@ class Gameboard {
         this.noJumpReverseRight = false;
         this.noJumpReverseLeft = false;
         this.kinged=false;
+        this.turnAnimation = 1;
     }
 
     createBoard(){
@@ -78,7 +79,8 @@ class Gameboard {
 
     startGame(){
         //Enable checker click handler
-        this.unlockCheckers();  
+        this.unlockCheckers(); 
+        $('.stopAnimation').on('click', this.toggleAnimation.bind(this));
     }
 
     getPosition(row,col){
@@ -146,7 +148,7 @@ class Gameboard {
                 if(row == "0"){
                     reverseLeft = this.getSquareValue(row+1,column-1);
                     reverseRight = this.getSquareValue(row+1,column+1);
-                } else if(row="7"){
+                } else if(row =="7"){
                     moveLeft = this.getSquareValue(row-1,column-1);
                     moveRight = this.getSquareValue(row-1,column+1); 
                 } else {
@@ -173,9 +175,9 @@ class Gameboard {
            switch(moveLeft){
                 case "0":
                     if(this.playerTurn){
-                        $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
+                        $("div[rownumber="+(row+1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight").addClass("alertPulse-css"); 
                     } else {
-                        $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight"); 
+                        $("div[rownumber="+(row-1)+"] > div[columnnumber="+(column-1)+"]").addClass("highlight").addClass("alertPulse-css"); 
                     }
                 break;
                 case "b":
@@ -748,7 +750,8 @@ class Gameboard {
     }   
 
     displayTurn(){
-        let display = $('.displayTurn');
+        if(this.turnAnimation == true) {
+            let display = $('.displayTurn');
         let slideBackground = $('.sliding-background');
         let appearAnimation = $('.appearAnimation');
         if(this.playerTurn){
@@ -766,6 +769,23 @@ class Gameboard {
             appearAnimation.toggleClass('show');
             slideBackground.removeClass("player1");
         },2000);
+        }
         
+        
+    }
+    toggleAnimation(){
+        if(this.turnAnimation) {
+            $('.stopAnimation').addClass('startAnimation').text('Animations: OFF');
+
+        } else {
+            $('.stopAnimation').removeClass('startAnimation').text('Animations: ON');
+        }
+        this.turnAnimation = 1 - this.turnAnimation;    
+    }
+
+    clearBoardAndReset(){
+        this.gameboard = [];
+        $('.gameArea').empty();
+        this.toggleAnimation = 1;
     }
 }
