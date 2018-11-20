@@ -7,12 +7,5 @@ function startApp(){
     game.startGame();
 }
 
-function reset(){
-    var game = new Gameboard();
-    game.clearBoardAndReset();
-    game.createBoard();
-    game.populateCheckers();
-    game.startGame();
-}
 
 startApp();

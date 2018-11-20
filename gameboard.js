@@ -80,6 +80,7 @@ class Gameboard {
     startGame(){
         //Enable checker click handler
         this.unlockCheckers(); 
+        $('.resetButton').on('click', this.resetGame.bind(this));
         $('.stopAnimation').on('click', this.toggleAnimation.bind(this));
     }
 
@@ -783,9 +784,26 @@ class Gameboard {
         this.turnAnimation = 1 - this.turnAnimation;    
     }
 
-    clearBoardAndReset(){
+    resetGame(){
         this.gameboard = [];
         $('.gameArea').empty();
-        this.toggleAnimation = 1;
+        this.playerTurn = 1;
+        this.currentRow ="";
+        this.currentColumn="";
+        this.jumped=false;
+        this.firstMove=true;
+        this.player1Counter=0;
+        this.player2Counter=0;
+        this.noJumpsLeft=false;
+        this.noJumpRight= false;
+        this.noJumpLeft = false;
+        this.noJumpReverseRight = false;
+        this.noJumpReverseLeft = false;
+        this.kinged=false;
+        this.turnAnimation = 1;
+        $('.win').removeClass('show');
+        this.createBoard();
+        this.populateCheckers();
+        this.startGame();
     }
 }

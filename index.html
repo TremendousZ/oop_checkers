@@ -1,6 +1,8 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <title>Checkers</title>
+        <link rel="shortcut icon" type="image/png" href="./images/checkers_board_logo.png"></link>
         <script
             src="https://code.jquery.com/jquery-3.3.1.js"
             integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -26,7 +28,7 @@
             <div class = "leftColumn">
                 <div class = "buttonContainer">
                     <div class="playerTurn"></div>
-                    <button class = "resetButton" onclick="reset()">Reset Game</button>
+                    <button class = "resetButton" >Reset Game</button>
                     <button class = "stopAnimation">Animations : ON</button>    
                 </div>
             </div>
@@ -41,18 +43,4 @@
         </div>
         
     </body>
-    <script>
-            var video = document.getElementById("myVideo");
-            var btn = document.getElementById("myBtn");
-            
-            function myFunction() {
-              if (video.paused) {
-                video.play();
-                btn.innerHTML = "Pause";
-              } else {
-                video.pause();
-                btn.innerHTML = "Play";
-              }
-            }
-            </script>
 </html>

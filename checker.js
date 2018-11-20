@@ -4,6 +4,7 @@ class Checker{
         this.checker = {
             color
         };
+        this.crownSRC = "./images/king_crown.png";
     }
 
     createRedChecker(){
@@ -11,7 +12,10 @@ class Checker{
     }
 
     createRedKing(){
-        return $("<div>").addClass("player1 checker king1");
+        let redKing = $("<div>").addClass("player1 checker king1");
+        let kingEmblem =$("<img>").attr("src",this.crownSRC).addClass('kingEmblem');
+        redKing.append(kingEmblem); 
+        return redKing;
     }
 
     createBlackChecker(){
@@ -19,7 +23,10 @@ class Checker{
     }
 
     createBlackKing(){
-        return $("<div>").addClass("player2 checker king2");
+        let blackKing = $("<div>").addClass("player2 checker king2");
+        let kingEmblem =$("<img>").attr("src",this.crownSRC).addClass('kingEmblem');
+        blackKing.append(kingEmblem); 
+        return blackKing;
     }
 
     checkValidMoves(){
