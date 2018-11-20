@@ -76,7 +76,14 @@ body{
     border-radius: 100%;
     margin: 3.5% auto;
     box-shadow: 2px 2px 2px black;
+    position: relative;
 }
+
+.checker:hover{
+    cursor: pointer;
+    border: 2px solid yellow;
+}
+
 .player1{
     background-image: url("./images/red-checker.png");
     background-position: center;
@@ -100,15 +107,13 @@ animation-duration: 1.5s;
     opacity: 1;
 }
 
-.king1{
-    background-image: url("./images/light-marble-checker.png");
-    background-position: center;
+.kingEmblem{
+    background-image: url("images/king_crown.png");
+    z-index:2;
+    height:100%;
+    width:100%;
+    position: absolute;
 }
-.king2{
-    background-image: url("./images/dark-marble-checker.png");
-    background-position: center;
-}
-
 @keyframes slideRight{
     0%   { left:0%; top:10%;}
     50%  { left:50%; top:10%}
@@ -119,6 +124,11 @@ animation-duration: 1.5s;
     100% { left:50%; top:50%;}
 }
 
+@keyframes batarang{
+    0%  { transform: rotate(0deg); left:0; top:50%}
+    100% { transform: rotate(1080deg); top:50%; left:50%}; 
+}
+
 .displayTurn{
     width:50%;
     font-size:5rem;
@@ -126,9 +136,9 @@ animation-duration: 1.5s;
     vertical-align: top;
     position: absolute;
     z-index: 3;
-    display:none;
-    
+    display:none;  
 }
+
 .slideAnimation{
     animation-name: slideRight;
     animation-duration: 2s;
@@ -154,8 +164,7 @@ animation-duration: 1.5s;
     position: absolute;
     width: 100%;
     z-index: 3;
-    display: none;
-    
+    display: none;    
 }
 
 .sliding-background{
@@ -173,15 +182,17 @@ animation-duration: 1.5s;
 }
 
 .win{
-    width:50%;
     font-size:3rem;
     position: absolute;
     z-index: 3;
     display:none;
+    color:yellow;
+    text-shadow:2px 2px black;
+    width: fit-content;
 }
 .winAnimation{
-    animation-name: slideDown;
-    animation-duration: 4s;
+    animation-name: batarang;
+    animation-duration: 3s;
 }
 
 .playerTurn{
@@ -218,13 +229,24 @@ button{
     font-weight:400;
     font-family: Arial, Helvetica, sans-serif;
 }
+button:focus{
+    outline:none;   
+}
+button:hover{
+    cursor: pointer;
+}
+.resetButton:hover{
+    background-color: yellow;
+}
+
 #myVideo {
     position: fixed;
-    right: 0;
-    bottom: 0;
+    left: 0;
+    top: 0;
     min-width: 100%; 
     min-height: 100%;
 }
+
 
 
 
