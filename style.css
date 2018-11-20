@@ -123,11 +123,20 @@ animation-duration: 1.5s;
     0%  { left:50%; top:0%}
     100% { left:50%; top:50%;}
 }
-
-@keyframes batarang{
-    0%  { transform: rotate(0deg); left:0; top:50%}
-    100% { transform: rotate(1080deg); top:50%; left:50%}; 
+@keyframes rainbow{
+    0%{color:indigo;transform: rotate(0deg); left:0; top:50%}
+    10%{color:yellowgreen;}
+    20%{color:blue;}
+    30%{color:pink;}
+    40%{color:green;}
+    50%{color: orange;}
+    60%{color:lawngreen}
+    70%{color:red}
+    80%{color:cyan;}
+    90%{color:palevioletred}
+    100%{color: whitesmoke; transform: rotate(1080deg); top:50%; left:50%}
 }
+
 
 .displayTurn{
     width:50%;
@@ -181,17 +190,20 @@ animation-duration: 1.5s;
     background-image: url("images/red-background-laser.jpg");
 }
 
+
+.rainbow{
+    animation: rainbow 6s  alternate;
+}
 .win{
     font-size:3rem;
     position: absolute;
     z-index: 3;
     display:none;
-    color:yellow;
     text-shadow:2px 2px black;
     width: fit-content;
 }
 .winAnimation{
-    animation-name: batarang;
+    animation-name: rainbow;
     animation-duration: 3s;
 }
 
@@ -235,6 +247,7 @@ button:focus{
 button:hover{
     cursor: pointer;
 }
+
 .resetButton:hover{
     background-color: yellow;
 }

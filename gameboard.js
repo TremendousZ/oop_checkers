@@ -739,12 +739,12 @@ class Gameboard {
     checkEndGame(){
         let win = $('.win');
             if (this.player1Counter==12){
-                win.text("PLAYER 1 WINS!");
+                win.text("PLAYER 1 WINS!").css("color","red");
                 $(".player1").off('click');
                 win.toggleClass('show').addClass("center");
             }
             if (this.player2Counter ==12){
-                win.text("PLAYER 2 WINS!");
+                win.text("PLAYER 2 WINS!").css("color","blue");
                 $(".player1").off('click');
                 win.toggleClass('show').addClass("center");
             }
