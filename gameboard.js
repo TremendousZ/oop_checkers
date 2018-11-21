@@ -477,6 +477,8 @@ class Gameboard {
                     this.player2Counter++;  
                 }
             }
+            $('.player1Score span').text(`${this.player1Counter}`);
+            $('.player2Score span').text(`${this.player2Counter}`);
             $(".jumpRight").removeClass("jumpRight");
             $(".jumpLeft").removeClass("jumpLeft");
             $(".jumpLeftReverse").removeClass("jumpLeftReverse");
