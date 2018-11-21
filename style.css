@@ -207,11 +207,21 @@ animation-duration: 1.5s;
     animation-duration: 3s;
 }
 
-.playerTurn{
+.playerTurn,.player1Score,.player2Score{
     font-size: 2rem;
     position: relative; 
-    text-align: center;   
+    text-align: center;  
+    color:white; 
+    text-shadow: 1px 1px black;
 }
+
+.player1Score span{
+    color:red;
+}
+.player2Score span{
+    color:blue;
+}
+
 .show{
     display: block;
 }
